@@ -1,12 +1,14 @@
 import { ApolloServer } from "@apollo/server";
 import { startStandaloneServer } from "@apollo/server/standalone";
 import { gql } from "apollo-server-express";
+import customerSchema from "./graphql/schema";
 // Defina um schema básico
 const typeDefs = gql`
   type Query {
     hello: String
   }
 `;
+console.log(customerSchema);
 // Defina os resolvers
 const resolvers = {
   Query: {

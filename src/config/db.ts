@@ -1,11 +1,12 @@
-import { Client } from "pg";
+import pkg from "pg";
+const { Client } = pkg;
 
 const client = new Client({
   user: "postgres",
   host: "localhost",
   database: "postgres", // Your database name
   password: "1234", // Your PostgreSQL password
-  port: 543,
+  port: 5431,
 });
 
 client
