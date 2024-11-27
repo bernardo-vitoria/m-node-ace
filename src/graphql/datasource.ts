@@ -6,9 +6,8 @@ interface Customer {
   name: string;
 }
 
-const createCustomer = async (customerData: {
-  name: string;
-}): Promise<Customer> => {
+const createCustomer = async (customerData: { name: string }) => {
+  console.log("createCustomer");
   const { name } = customerData;
   const result = await db.query(
     "INSERT INTO customer (name) VALUES ($1) RETURNING *",
@@ -17,7 +16,8 @@ const createCustomer = async (customerData: {
   return result.rows[0];
 };
 
-const getAllCustomers = async (): Promise<Customer[]> => {
+const getAllCustomers = async () => {
+  console.log("getAllCustomers");
   const result = await db.query("SELECT * FROM customer");
   return result.rows;
 };
