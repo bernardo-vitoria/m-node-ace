@@ -1,20 +1,32 @@
-// Import the 'express' module
-import express from "express";
+import { ApolloServer } from "@apollo/server";
+import { startStandaloneServer } from "@apollo/server/standalone";
+import { gql } from "apollo-server-express";
 
-// Create an Express application
-const app = express();
+// Defina um schema básico
+const typeDefs = gql`
+  type Query {
+    hello: String
+  }
+`;
 
-// Set the port number for the server
-const port = 3000;
+// Defina os resolvers
+const resolvers = {
+  Query: {
+    hello: () => "Hello, world!",
+  },
+};
 
-// Define a route for the root path ('/')
-app.get("/", (req, res) => {
-  // Send a response to the client
-  res.send("Hello, TypeScript + Node.js + Express!");
+// Crie o servidor Apollo e use o Express
+const server = new ApolloServer({ typeDefs, resolvers });
+
+const { url } = await startStandaloneServer(server, {
+  listen: { port: 4000 },
 });
 
-// Start the server and listen on the specified port
-app.listen(port, () => {
-  // Log a message when the server is successfully running
-  console.log(`Server is running on http://localhost:${port}`);
-});
+/* // Definindo a porta do servidor
+app.listen(4000, () =>
+  console.log(`Server ready at http://localhost:4000${server.graphqlPath}`)
+);
+ */
+
+console.log(`🚀  Server ready at: ${url}`);

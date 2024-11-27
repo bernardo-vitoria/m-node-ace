@@ -1,5 +1,5 @@
 // services/customerService.ts
-import db from "../../config/db";
+import db from "../config/db";
 
 interface Customer {
   id: number;
