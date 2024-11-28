@@ -1,25 +1,21 @@
-// services/customerService.ts
-import db from "../../config/db";
+import Customer from "../../models/customer"; // Importe o modelo do Sequelize
 
-interface Customer {
+interface CustomerData {
   id: number;
   name: string;
 }
 
-const createCustomer = async (customerData: { name: string }) => {
-  console.log("createCustomer");
+const createCustomer = async (customerData: {
+  name: string;
+}): Promise<CustomerData> => {
   const { name } = customerData;
-  const result = await db.query(
-    "INSERT INTO customer (name) VALUES ($1) RETURNING *",
-    [name]
-  );
-  return result.rows[0];
+  const customer = await Customer.create({ name });
+  return customer; // Retorna o novo cliente criado
 };
 
-const getAllCustomers = async () => {
-  console.log("getAllCustomers");
-  const result = await db.query("SELECT * FROM customer");
-  return result.rows;
+const getAllCustomers = async (): Promise<CustomerData[]> => {
+  const customers = await Customer.findAll(); // Busca todos os clientes
+  return customers.map((customer) => customer.toJSON()); // Retorna os clientes como objetos
 };
 
 export default {

@@ -1,17 +1,11 @@
-import pkg from "pg";
-const { Client } = pkg;
+import { Sequelize } from "sequelize";
 
-const client = new Client({
-  user: "postgres",
+const sequelize = new Sequelize({
+  dialect: "postgres",
   host: "localhost",
-  database: "postgres", // Your database name
-  password: "1234", // Your PostgreSQL password
+  username: "postgres",
+  password: "1234",
+  database: "postgres",
   port: 5431,
 });
-
-client
-  .connect()
-  .then(() => console.log("Connected to the database"))
-  .catch((err) => console.error("Connection error:", err));
-
-export default client;
+export default sequelize;
