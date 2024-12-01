@@ -17,6 +17,10 @@ const typeDefs = gql`
       customerIds: [ID!]! # Lista de IDs de jogadores
     ): Game
   }
+
+  type Query {
+    games: [Game]
+  }
 `;
 
 export default typeDefs;

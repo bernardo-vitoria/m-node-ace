@@ -3,8 +3,14 @@ import Customer from "../../models/customer";
 import CustomerGame from "../../models/customerGame";
 import { IResolvers } from "@graphql-tools/utils";
 import Game from "../../models/game";
+import GameDatasource from "./datasource";
 
 const resolvers: IResolvers = {
+  Query: {
+    games: async (_: any, {}) => {
+      return await GameDatasource.getAllGames();
+    },
+  },
   Mutation: {
     createGame: async (
       _: any,
