@@ -1,0 +1,60 @@
+# Ficheiros de teste e logs
+lib-cov
+*.seed
+*.log
+*.csv
+*.dat
+*.out
+*.pid
+*.gz
+*.swp
+
+# Diretórios de trabalho temporários
+pids
+logs
+results
+tmp
+
+# Diretórios de build e saída
+public/css/main.css
+dist/
+build/
+
+# Diretórios de dependências
+node_modules/
+bower_components/
+.pnp/
+.pnp.js
+
+# Relatórios de cobertura
+coverage/
+
+# Ficheiros de configuração de ambiente
+.env
+.env.local
+.env.*.local
+
+# Ficheiros de bloqueio de dependências
+yarn.lock
+pnpm-lock.yaml
+package-lock.json
+
+# Configuração de editores e IDEs
+.idea/
+*.iml
+.vscode/
+*.sublime-*
+
+# Metadados de sistemas operativos
+.DS_Store
+Thumbs.db
+
+# Configurações específicas do TypeScript e compilação
+*.tsbuildinfo
+*.d.ts
+
+# Outros
+.nyc_output/
+.eslintcache
+.parcel-cache/
+.vite/
