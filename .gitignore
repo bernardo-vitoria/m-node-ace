@@ -53,6 +53,8 @@ Thumbs.db
 *.tsbuildinfo
 *.d.ts
 
+.gitconfig-profile
+
 # Outros
 .nyc_output/
 .eslintcache
