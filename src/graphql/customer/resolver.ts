@@ -8,8 +8,21 @@ const resolvers: IResolvers = {
     },
   },
   Mutation: {
-    createCustomer: async (_: any, { name }: { name: string }) => {
-      return await customerService.createCustomer({ name });
+    createCustomer: async (
+      _: any,
+      {
+        name,
+        tin,
+        phoneNumber,
+        email,
+      }: { name: string; tin: number; phoneNumber?: string; email?: string }
+    ) => {
+      return await customerService.createCustomer({
+        name,
+        tin,
+        phoneNumber,
+        email,
+      });
     },
   },
 };

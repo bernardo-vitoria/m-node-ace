@@ -3,13 +3,24 @@ import Customer from "../../models/customer"; // Importe o modelo do Sequelize
 interface CustomerData {
   id: number;
   name: string;
+  tin: number;
+  phoneNumber?: number;
+  email?: string;
 }
 
 const createCustomer = async (customerData: {
   name: string;
+  tin: number;
+  phoneNumber?: number;
+  email?: string;
 }): Promise<CustomerData> => {
-  const { name } = customerData;
-  const customer = await Customer.create({ name });
+  const { name, tin } = customerData;
+  const customer = await Customer.create({
+    name,
+    tin,
+    phoneNumber: customerData?.phoneNumber,
+    email: customerData?.email,
+  });
   return customer; // Retorna o novo cliente criado
 };
 

@@ -5,6 +5,9 @@ import sequelize from "../config/db"; // A conexão com o Sequelize
 interface CustomerAttributes {
   id: number;
   name: string;
+  tin: number;
+  phoneNumber?: number;
+  email?: string;
 }
 
 interface CustomerCreationAttributes
@@ -16,6 +19,9 @@ class Customer
 {
   public id!: number;
   public name!: string;
+  public email?: string;
+  public tin!: number;
+  public phoneNumber?: number;
 }
 
 Customer.init(
@@ -29,12 +35,24 @@ Customer.init(
       type: DataTypes.STRING,
       allowNull: false,
     },
+    tin: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
+    phoneNumber: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+    },
+    email: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
   },
   {
-    sequelize, // Passa a instância do sequelize
-    modelName: "Customer", // Nome do modelo
-    tableName: "customer", // Nome da tabela no banco
-    timestamps: false, // Desativa os campos createdAt e updatedAt
+    sequelize, // pass instance to sequelize
+    modelName: "Customer", // mode name
+    tableName: "customer", // database table name
+    timestamps: false, // desactive fields createdAt and updatedAt
   }
 );
 
