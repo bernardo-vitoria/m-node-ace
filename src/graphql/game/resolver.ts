@@ -4,11 +4,37 @@ import CustomerGame from "../../models/customerGame";
 import { IResolvers } from "@graphql-tools/utils";
 import Game from "../../models/game";
 import GameDatasource from "./datasource";
+import Payment from "../../models/payment";
 
 const resolvers: IResolvers = {
   Query: {
     games: async (_: any, {}) => {
-      return await GameDatasource.getAllGames();
+      const games = await GameDatasource.getAllGames();
+
+      return await Promise.all(
+        games.map(async (game) => {
+          const customers = await Customer.findAll({
+            include: [
+              {
+                model: Payment,
+                as: "payments",
+                where: { gameId: game.id },
+                required: false,
+              },
+            ],
+          });
+
+          const enrichedCustomers = customers.map((customer) => ({
+            ...customer.toJSON(),
+            payments: customer.payments, // Access payments with the alias
+          }));
+
+          return {
+            ...game.toJSON(),
+            customers: enrichedCustomers,
+          };
+        })
+      );
     },
   },
   Mutation: {

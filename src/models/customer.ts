@@ -1,6 +1,7 @@
 // src/models/customer.ts
 import { DataTypes, Model, Optional } from "sequelize";
 import sequelize from "../config/db"; // A conexão com o Sequelize
+import Payment from "./payment";
 
 interface CustomerAttributes {
   id: number;
@@ -8,6 +9,7 @@ interface CustomerAttributes {
   tin: number;
   phoneNumber?: number;
   email?: string;
+  payments?: Payment[];
 }
 
 interface CustomerCreationAttributes
@@ -22,6 +24,7 @@ class Customer
   public email?: string;
   public tin!: number;
   public phoneNumber?: number;
+  public payments?: Payment[];
 }
 
 Customer.init(

@@ -7,6 +7,7 @@ interface PaymentAttributes {
   customerId: number;
   paid: boolean;
   method: string;
+  value: number;
   gameId?: number;
 }
 

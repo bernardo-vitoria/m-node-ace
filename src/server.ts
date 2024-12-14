@@ -1,45 +1,41 @@
 import { ApolloServer } from "@apollo/server";
 import { startStandaloneServer } from "@apollo/server/standalone";
-import { gql } from "apollo-server-express";
 import customerSchema from "./graphql/customer/schema";
 import customerResolver from "./graphql/customer/resolver";
 import gameSchema from "./graphql/game/schema";
 import gameResolver from "./graphql/game/resolver";
-import sequelize from "./config/db"; // Conexão com o Sequelize
-import { setupAssociations } from "./models"; // Função para configurar associações
+import { paymentSchema } from "./graphql/payment";
+import { paymentResolver } from "./graphql/payment";
+import sequelize from "./config/db";
+import { setupAssociations } from "./models";
 
-console.log(customerResolver, customerSchema);
-
-// Função para iniciar o servidor
 const startServer = async () => {
   try {
-    // Configurar as associações do Sequelize entre os modelos
+    // Set up Sequelize associations between models
     setupAssociations();
 
-    // Testar a conexão com o banco de dados
+    // database connection
     await sequelize.authenticate();
-    console.log("Conexão com o banco de dados estabelecida com sucesso.");
+    console.log("Database connection established successfully.");
 
-    // Sincronizar o banco de dados
-    await sequelize.sync({ alter: true }); // Sincronizar o esquema
-    console.log("Banco de dados sincronizado com sucesso.");
+    // Sync database schema
+    await sequelize.sync({ alter: true });
 
+    console.log("Database synchronized successfully.");
     console.log("\n\n\n Creating ApolloServer...");
 
-    // Criar o servidor Apollo
     const server = new ApolloServer<{}>({
-      typeDefs: [customerSchema, gameSchema],
-      resolvers: [customerResolver, gameResolver],
+      typeDefs: [customerSchema, gameSchema, paymentSchema],
+      resolvers: [customerResolver, gameResolver, paymentResolver],
     });
 
-    // Iniciar o servidor Apollo
     const { url } = await startStandaloneServer(server, {
       listen: { port: 4000 },
     });
 
     console.log(`🚀  Server ready at: ${url}`);
   } catch (error) {
-    console.error("Erro ao iniciar o servidor:", error);
+    console.error("Failed to start server:", error);
   }
 };
 

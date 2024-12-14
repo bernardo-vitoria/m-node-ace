@@ -6,7 +6,24 @@ const typeDefs = gql`
     starttime: String!
     endtime: String!
     field: String!
-    customers: [Customer!]! # Relacionamento com jogadores
+    customers: [CustomerDetails!]!
+  }
+
+  type CustomerDetails {
+    id: ID!
+    name: String!
+    tin: Int!
+    phoneNumber: Int!
+    email: String!
+    payments: [Payment]
+  }
+
+  type Payment {
+    id: ID!
+    product: String!
+    paid: Boolean!
+    method: String!
+    value: Float!
   }
 
   type Mutation {
