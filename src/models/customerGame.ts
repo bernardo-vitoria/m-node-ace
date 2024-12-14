@@ -28,7 +28,7 @@ CustomerGame.init(
     },
     gameId: {
       type: DataTypes.INTEGER,
-      allowNull: false,
+      allowNull: true,
     },
   },
   {
