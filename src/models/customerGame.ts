@@ -13,6 +13,7 @@ class CustomerGame extends Model<
   declare id?: number; // Torna o campo opcional
   declare customerId: number;
   declare gameId: number;
+  declare paymentId?: number;
 }
 
 CustomerGame.init(
@@ -27,6 +28,10 @@ CustomerGame.init(
       allowNull: false,
     },
     gameId: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+    },
+    paymentId: {
       type: DataTypes.INTEGER,
       allowNull: true,
     },

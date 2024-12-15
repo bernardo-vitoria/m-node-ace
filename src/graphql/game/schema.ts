@@ -13,9 +13,9 @@ const typeDefs = gql`
     id: ID!
     name: String!
     tin: Int!
-    phoneNumber: Int!
-    email: String!
-    payments: [Payment]
+    phoneNumber: Int
+    email: String
+    payment: Payment
   }
 
   type Payment {

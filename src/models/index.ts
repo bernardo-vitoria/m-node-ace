@@ -31,6 +31,9 @@ const setupAssociations = () => {
   Game.hasMany(Payment, {
     foreignKey: "gameId",
   });
+
+  CustomerGame.belongsTo(Payment, { foreignKey: "paymentId" });
+  Payment.hasOne(CustomerGame, { foreignKey: "paymentId" });
 };
 
 export { sequelize, Customer, Game, CustomerGame, setupAssociations };

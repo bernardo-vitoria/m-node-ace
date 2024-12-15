@@ -25,13 +25,23 @@ const resolvers: IResolvers = {
           });
 
           const enrichedCustomers = customers.map((customer) => ({
-            ...customer.toJSON(),
-            payments: customer.payments, // Access payments with the alias
+            id: customer.id,
+            name: "BONECO", // Use placeholder de acordo com contexto
+            tin: customer.tin,
+            email: customer.email,
+            phoneNumber: customer.phoneNumber,
+            payment:
+              customer
+                .toJSON()
+                .payments?.find((payment) => payment.gameId === game.id) ||
+              null,
           }));
+
+          console.log("enrichedCustomers", enrichedCustomers); // Verifique dados aqui
 
           return {
             ...game.toJSON(),
-            customers: enrichedCustomers,
+            customers: enrichedCustomers, // Garanta que o retorno inclui todos os dados
           };
         })
       );
@@ -54,10 +64,22 @@ const resolvers: IResolvers = {
     ) => {
       const game = await Game.create({ starttime, endtime, field });
 
+      const paymentsEntries = customerIds.map((customerId) => ({
+        customerId,
+        product: "game",
+        paid: false,
+        method: "none",
+        value: 0,
+        gameId: game.id,
+      }));
+
+      const payments = await Payment.bulkCreate(paymentsEntries);
       const customerGameEntries = customerIds.map((customerId) => ({
         customerId,
         gameId: game.id,
+        paymentId: payments.find((p) => p.gameId === game.id)?.id,
       }));
+
       await CustomerGame.bulkCreate(customerGameEntries);
 
       return game;
