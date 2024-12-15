@@ -6,6 +6,7 @@ interface CustomerData {
   tin: number;
   phoneNumber?: number;
   email?: string;
+  subscription?: string;
 }
 
 const createCustomer = async (customerData: {
@@ -13,6 +14,7 @@ const createCustomer = async (customerData: {
   tin: number;
   phoneNumber?: number;
   email?: string;
+  subscription?: string;
 }): Promise<CustomerData> => {
   const { name, tin } = customerData;
   const customer = await Customer.create({
@@ -20,6 +22,7 @@ const createCustomer = async (customerData: {
     tin,
     phoneNumber: customerData?.phoneNumber,
     email: customerData?.email,
+    subscription: customerData?.subscription,
   });
   return customer; // Retorna o novo cliente criado
 };

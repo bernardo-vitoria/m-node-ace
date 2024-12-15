@@ -6,7 +6,7 @@ import Payment from "./payment";
 interface CustomerAttributes {
   id: number;
   name: string;
-  subscription: string;
+  subscription?: string;
   tin: number;
   phoneNumber?: number;
   email?: string;
@@ -22,7 +22,7 @@ class Customer
 {
   public id!: number;
   public name!: string;
-  public subscription!: string;
+  public subscription?: string;
   public email?: string;
   public tin!: number;
   public phoneNumber?: number;
