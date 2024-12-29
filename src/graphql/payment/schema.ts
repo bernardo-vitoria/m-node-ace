@@ -22,6 +22,10 @@ const typeDefs = gql`
     ): Payment
   }
 
+  type Mutation {
+    paid(paymentId: ID!, method: String!): Payment
+  }
+
   type Query {
     payments: [Payment]
   }

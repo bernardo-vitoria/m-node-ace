@@ -1,3 +1,4 @@
+import Payment from "../../models/payment";
 import datasource from "./datasource";
 
 type CreatePaymentArgs = {
@@ -26,6 +27,20 @@ export const paymentResolver = {
           throw new Error("An unexpected error occurred");
         }
       }
+    },
+    paid: async (_: any, args: { method: string; paymentId: string }) => {
+      const payment = await Payment.findByPk(args.paymentId);
+
+      if (!payment) {
+        throw new Error("Payment not found");
+      }
+
+      payment.paid = true;
+      payment.method = args.method;
+
+      await payment.save();
+
+      return payment;
     },
   },
 };
