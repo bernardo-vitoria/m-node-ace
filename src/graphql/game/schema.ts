@@ -1,6 +1,26 @@
 import { gql } from "apollo-server-express";
 
 const typeDefs = gql`
+  type Booking {
+    id: ID!
+    customerId: ID!
+    gameId: ID!
+    paymentId: ID
+    value: Float
+    subscription: String
+    name: String
+    paid: Boolean
+  }
+
+  type GameBooking {
+    gameId: ID!
+    bookings: [Booking!]!
+  }
+
+  type Query {
+    bookingsGroupedByGameId: [GameBooking!]! # Query to return bookings grouped by game id
+  }
+
   type Game {
     id: ID!
     starttime: String!
@@ -72,6 +92,10 @@ const typeDefs = gql`
 
   type Query {
     games: [Game]
+  }
+
+  type Query {
+    bookingByGameId(gameId: ID): GameGroup # Retorna um booking específico pelo ID
   }
 `;
 

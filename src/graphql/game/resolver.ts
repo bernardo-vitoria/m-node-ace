@@ -13,45 +13,58 @@ const resolvers: IResolvers = {
 
       return games;
     },
-    booking: async () => {
-      const customergames = await CustomerGame.findAll();
+    bookingByGameId: async (_: any, { gameId }) => {
+      const customerGames = await CustomerGame.findAll({
+        where: { gameId },
+      });
 
-      // Group by gameId
-      const gamesMap = new Map();
+      const game = await Game.findByPk(gameId);
 
-      for (const customergame of customergames) {
-        if (!gamesMap.has(customergame.gameId)) {
-          gamesMap.set(customergame.gameId, []);
-        }
+      if (!game) throw new Error(`No game found for id ${gameId}`);
 
-        const customer = await Customer.findByPk(customergame.customerId);
+      const customers = await Promise.all(
+        customerGames.map(async (customergame) => {
+          const customer = await Customer.findByPk(customergame.customerId);
 
-        if (customer) {
-          const payment = await Payment.findOne({
-            where: {
-              customerId: customer.id,
-              gameId: customergame.gameId,
-            },
-          });
+          const payment = customer
+            ? await Payment.findOne({
+                where: {
+                  customerId: customer.id,
+                  gameId: customergame.gameId,
+                },
+              })
+            : null;
 
-          gamesMap.get(customergame.gameId).push({
-            ...customer.toJSON(),
-            payment: payment || null,
-          });
-        }
-      }
-
-      // Convert to GameGroupList with details of the game
-      return Promise.all(
-        Array.from(gamesMap.entries()).map(async ([gameId, customers]) => {
-          const game = await Game.findByPk(gameId);
-
-          return {
-            game: game ? game.toJSON() : null,
-            customers,
-          };
+          return customer
+            ? {
+                ...customer.toJSON(),
+                payment: payment || null,
+              }
+            : null;
         })
       );
+
+      return {
+        game: game.toJSON(),
+        customers: customers.filter((c) => c !== null),
+      };
+    },
+    bookingsGroupedByGameId: async () => {
+      const bookings = await CustomerGame.findAll();
+
+      const gamesMap = new Map();
+
+      bookings.forEach((booking) => {
+        if (!gamesMap.has(booking.gameId)) {
+          gamesMap.set(booking.gameId, []);
+        }
+        gamesMap.get(booking.gameId).push(booking);
+      });
+
+      return Array.from(gamesMap.entries()).map(([gameId, bookings]) => ({
+        gameId,
+        bookings,
+      }));
     },
   },
   Mutation: {
