@@ -8,7 +8,11 @@ import Payment from "../../models/payment";
 
 const resolvers: IResolvers = {
   Query: {
-    games: async (_: any, {}) => {},
+    games: async (_: any, {}) => {
+      const games = GameDatasource.getAllGames();
+
+      return games;
+    },
     booking: async () => {
       const customergames = await CustomerGame.findAll();
 
@@ -72,7 +76,7 @@ const resolvers: IResolvers = {
         product: "game",
         paid: false,
         method: "none",
-        value: 0,
+        value: 1,
         gameId: game.id,
       }));
 
@@ -80,7 +84,11 @@ const resolvers: IResolvers = {
       const customerGameEntries = customerIds.map((customerId) => ({
         customerId,
         gameId: game.id,
-        paymentId: payments.find((p) => p.gameId === game.id)?.id,
+        paymentId: payments.find((p) => p.gameId === game.id)!.id,
+        value: 1,
+        subscription: "none",
+        paid: false,
+        name: "nameless",
       }));
 
       await CustomerGame.bulkCreate(customerGameEntries);
