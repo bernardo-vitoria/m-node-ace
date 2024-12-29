@@ -10,10 +10,14 @@ class CustomerGame extends Model<
   InferAttributes<CustomerGame>,
   InferCreationAttributes<CustomerGame>
 > {
-  declare id?: number; // Torna o campo opcional
+  declare id?: number;
   declare customerId: number;
   declare gameId: number;
-  declare paymentId?: number;
+  declare paymentId: number;
+  declare value: number;
+  declare name: string;
+  declare paid: boolean;
+  declare subscription: string;
 }
 
 CustomerGame.init(
@@ -33,7 +37,24 @@ CustomerGame.init(
     },
     paymentId: {
       type: DataTypes.INTEGER,
-      allowNull: true,
+      allowNull: false,
+    },
+    value: {
+      type: DataTypes.FLOAT,
+      allowNull: false,
+    },
+    subscription: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    name: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    paid: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: false,
     },
   },
   {

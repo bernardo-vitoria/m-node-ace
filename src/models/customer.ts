@@ -2,6 +2,7 @@
 import { DataTypes, Model, Optional } from "sequelize";
 import sequelize from "../config/db"; // A conexão com o Sequelize
 import Payment from "./payment";
+import CustomerGame from "./customerGame";
 
 interface CustomerAttributes {
   id: number;
@@ -64,5 +65,12 @@ Customer.init(
     timestamps: false, // desactive fields createdAt and updatedAt
   }
 );
+
+Customer.afterUpdate(async (customer, options) => {
+  await CustomerGame.update(
+    { subscription: customer.subscription, name: customer.name },
+    { where: { customerId: customer.id } }
+  );
+});
 
 export default Customer;

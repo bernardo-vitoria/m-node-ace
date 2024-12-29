@@ -1,5 +1,6 @@
 import { DataTypes, Model, Optional } from "sequelize";
 import sequelize from "../config/db"; // Import Sequelize instance
+import CustomerGame from "./customerGame";
 
 interface PaymentAttributes {
   id: number;
@@ -66,5 +67,12 @@ Payment.init(
     timestamps: false,
   }
 );
+
+Payment.afterUpdate(async (payment, options) => {
+  await CustomerGame.update(
+    { value: payment.value, paid: payment.paid },
+    { where: { paymentId: payment.id } }
+  );
+});
 
 export default Payment;
