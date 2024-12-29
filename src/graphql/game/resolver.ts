@@ -8,40 +8,43 @@ import Payment from "../../models/payment";
 
 const resolvers: IResolvers = {
   Query: {
-    games: async (_: any, {}) => {
-      const games = await GameDatasource.getAllGames();
+    games: async (_: any, {}) => {},
+    booking: async () => {
+      const customergames = await CustomerGame.findAll();
 
-      return await Promise.all(
-        games.map(async (game) => {
-          const customers = await Customer.findAll({
-            include: [
-              {
-                model: Payment,
-                as: "payments",
-                where: { gameId: game.id },
-                required: false,
-              },
-            ],
+      // Group by gameId
+      const gamesMap = new Map();
+
+      for (const customergame of customergames) {
+        if (!gamesMap.has(customergame.gameId)) {
+          gamesMap.set(customergame.gameId, []);
+        }
+
+        const customer = await Customer.findByPk(customergame.customerId);
+
+        if (customer) {
+          const payment = await Payment.findOne({
+            where: {
+              customerId: customer.id,
+              gameId: customergame.gameId,
+            },
           });
 
-          const enrichedCustomers = customers.map((customer) => ({
-            id: customer.id,
-            name: "BONECO", // Use placeholder de acordo com contexto
-            tin: customer.tin,
-            email: customer.email,
-            phoneNumber: customer.phoneNumber,
-            payment:
-              customer
-                .toJSON()
-                .payments?.find((payment) => payment.gameId === game.id) ||
-              null,
-          }));
+          gamesMap.get(customergame.gameId).push({
+            ...customer.toJSON(),
+            payment: payment || null,
+          });
+        }
+      }
 
-          console.log("enrichedCustomers", enrichedCustomers); // Verifique dados aqui
+      // Convert to GameGroupList with details of the game
+      return Promise.all(
+        Array.from(gamesMap.entries()).map(async ([gameId, customers]) => {
+          const game = await Game.findByPk(gameId);
 
           return {
-            ...game.toJSON(),
-            customers: enrichedCustomers, // Garanta que o retorno inclui todos os dados
+            game: game ? game.toJSON() : null,
+            customers,
           };
         })
       );
